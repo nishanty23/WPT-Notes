@@ -171,82 +171,339 @@ That means an **ID selector** has higher priority than a **class selector**, a *
 
 ---
 
-# 4. Types of CSS
+# 4. Practical CSS Selector Combination Examples
 
-CSS can be classified based on **where we write the CSS code**.
-
-There are three main types of CSS:
-
-1. Internal CSS
-2. External CSS
-3. Inline CSS
+CSS selectors can also be **combined** to select elements more precisely.
 
 ---
 
-## 4.1 Internal CSS
+## 4.1 Group Selector
 
-**Internal CSS** is CSS written within the **same HTML file**, inside the `<style>` tag.
+A **group selector** is used when the same CSS needs to be applied to multiple different selectors.
 
-```html
-<html>
-    <head>
-        <title>CSS Demo</title>
-
-        <style>
-            p {
-                color: red;
-            }
-        </style>
-    </head>
-
-    <body>
-        <p>This is para 1</p>
-    </body>
-</html>
-```
-
-Here, the CSS is written inside the `<style>` tag in the HTML file.
-
----
-
-## 4.2 External CSS
-
-**External CSS** is CSS written **outside the HTML file**, inside a separate `.css` file.
-
-The external CSS file should then be **linked with the HTML file**.
-
-For example:
-
-```text
-index.html
-style.css
-```
-
-The CSS is written inside `style.css`:
+Instead of writing:
 
 ```css
+h1 {
+    color: blue;
+}
+
 p {
+    color: blue;
+}
+
+span {
+    color: blue;
+}
+```
+
+We can combine them:
+
+```css
+h1, p, span {
+    color: blue;
+}
+```
+
+### Example
+
+```html
+<h1>Heading</h1>
+<p>This is a paragraph.</p>
+<span>This is a span.</span>
+```
+
+All three elements will have **blue text**.
+
+---
+
+## 4.2 Descendant Selector
+
+A **descendant selector** selects an element that is present **inside another element**.
+
+Syntax:
+
+```css
+parent child {
+    property: value;
+}
+```
+
+### Example
+
+```css
+div p {
     color: red;
 }
 ```
 
-The CSS file is linked with the HTML file using the `<link>` tag:
+This selects all `<p>` elements that are inside a `<div>`.
 
 ```html
-<link rel="stylesheet" href="style.css">
+<div>
+    <p>This paragraph will be red.</p>
+</div>
+
+<p>This paragraph will not be red.</p>
+```
+
+Only the `<p>` inside the `<div>` will be affected.
+
+---
+
+## 4.3 Child Selector
+
+A **child selector** selects only the elements that are **direct children** of another element.
+
+The `>` symbol is used.
+
+Syntax:
+
+```css
+parent > child {
+    property: value;
+}
+```
+
+### Example
+
+```css
+div > p {
+    color: red;
+}
+```
+
+```html
+<div>
+    <p>This will be red.</p>
+
+    <section>
+        <p>This will NOT be red.</p>
+    </section>
+</div>
+```
+
+The first `<p>` is a **direct child** of `<div>`.
+
+The second `<p>` is inside `<section>`, so it is **not a direct child** of `<div>`.
+
+---
+
+## 4.4 Element + Class Selector
+
+We can combine a **tag selector** and a **class selector**.
+
+```css
+p.blue-font {
+    color: blue;
+}
+```
+
+This means:
+
+> Select only `<p>` elements that have the `blue-font` class.
+
+### Example
+
+```html
+<p class="blue-font">Paragraph 1</p>
+
+<h1 class="blue-font">Heading 1</h1>
+
+<p>Paragraph 2</p>
+```
+
+Only the first `<p>` will become blue.
+
+The `<h1>` will not be affected because the selector specifically targets `<p>` elements.
+
+---
+
+## 4.5 Element + ID Selector
+
+We can also combine a **tag selector** with an **ID selector**.
+
+```css
+h1#main-heading {
+    color: red;
+}
+```
+
+This selects an `<h1>` element whose ID is `main-heading`.
+
+### Example
+
+```html
+<h1 id="main-heading">Main Heading</h1>
+
+<p id="main-heading">Paragraph</p>
+```
+
+Only the `<h1>` matches:
+
+```css
+h1#main-heading {
+    color: red;
+}
 ```
 
 ---
 
-## 4.3 Inline CSS
+## 4.6 Class + Class Selector
 
-**Inline CSS** is CSS written directly inside an HTML tag using the `style` attribute.
+Multiple classes can be combined.
 
-```html
-<p style="color: red;">This is para 1</p>
+```css
+.blue-font.bold {
+    color: blue;
+    font-weight: bold;
+}
 ```
 
-Here, the CSS is applied directly to the `<p>` element.
+This selects an element that has **both** `blue-font` and `bold` classes.
+
+### Example
+
+```html
+<p class="blue-font bold">
+    This text will be blue and bold.
+</p>
+
+<p class="blue-font">
+    This text will only be blue.
+</p>
+
+<p class="bold">
+    This text will only be bold.
+</p>
+```
+
+Only the first paragraph has **both classes**, so only it will receive both properties.
+
+---
+
+## 4.7 ID + Class Selector
+
+We can combine an ID and a class selector.
+
+```css
+#heading.blue-font {
+    color: blue;
+}
+```
+
+This selects the element that has:
+
+- ID → `heading`
+- Class → `blue-font`
+
+### Example
+
+```html
+<h1 id="heading" class="blue-font">
+    Hello
+</h1>
+```
+
+The selector matches this element because it has both the specified ID and class.
+
+---
+
+## 4.8 Multiple Classes on an Element
+
+An HTML element can have **multiple classes**.
+
+```html
+<p class="blue-font large-text bold">
+    This is a paragraph.
+</p>
+```
+
+CSS:
+
+```css
+.blue-font {
+    color: blue;
+}
+
+.large-text {
+    font-size: 30px;
+}
+
+.bold {
+    font-weight: bold;
+}
+```
+
+The paragraph will have:
+
+- Blue text
+- Large font
+- Bold text
+
+---
+
+## 4.9 Combining Parent and Class Selectors
+
+We can select a class only when it appears inside a particular element.
+
+```css
+div .blue-font {
+    color: blue;
+}
+```
+
+### Example
+
+```html
+<div>
+    <p class="blue-font">This will be blue.</p>
+</div>
+
+<p class="blue-font">This will not be blue.</p>
+```
+
+The selector:
+
+```css
+div .blue-font
+```
+
+means:
+
+> Select any element having the `blue-font` class that is inside a `<div>`.
+
+---
+
+## 4.10 Combining Parent, Child and Class Selectors
+
+We can make the selector even more specific.
+
+```css
+div > p.blue-font {
+    color: blue;
+}
+```
+
+This means:
+
+> Select a `<p>` element with the `blue-font` class that is a direct child of `<div>`.
+
+### Example
+
+```html
+<div>
+    <p class="blue-font">This will be blue.</p>
+
+    <section>
+        <p class="blue-font">This will NOT be blue.</p>
+    </section>
+</div>
+```
+
+The first paragraph is a direct child of `<div>`.
+
+The second paragraph is not a direct child because it is inside `<section>`.
 
 ---
 
